@@ -6,6 +6,7 @@ from models.base_model import BaseModel
 from datetime import datetime
 import re
 
+
 class TestBaseModel(unittest.TestCase):
     """ Class for testing fuctions in BaseModel class"""
 
@@ -19,25 +20,25 @@ class TestBaseModel(unittest.TestCase):
 
     def test_model_id(self):
         """ Checks if the instance have public attribute id
-            of length 36 
+            of length 36
         """
         self.assertEqual(36, len(self.new_model.id))
-    
+
     def test_model_created_at(self):
-        """Check if model has attribute created_at which is 
+        """Check if model has attribute created_at which is
             instance of datetime
         """
         self.assertIsInstance(self.new_model.created_at, datetime)
 
     def test_model_updated_at(self):
-        """Check if model has attribute updated_at which is 
+        """Check if model has attribute updated_at which is
             instance of datetime
         """
         self.assertIsInstance(self.new_model.updated_at, datetime)
-        
+
     def test__str__method(self):
         """ Check if self.new_model.__str__ prints correct string"""
-        matched = re.match("^\[BaseModel\]\s\(.{36}\)\s\{.+\}", self.new_model.__str__())
+        matched = re.match("^\[BaseModel\]\s\(.{36}\)\s\{.+\}", self.new_model.__str__())  # noqa: E402
         matched = bool(matched)
         self.assertEqual(True, matched)
 
@@ -64,13 +65,14 @@ class TestBaseModel(unittest.TestCase):
         """
             Also checks if updated_at and created_at
         """
-        self.new_model.to_dict() 
-        match = re.match("^[0-9]{4}[-][0-9]{2}[-][0-9]{2}[T][0-9]{2}[:][0-9]{2}[:][0-9]+", str(self.new_model.created_at))
+        self.new_model.to_dict()
+        match = re.match("^[0-9]{4}[-][0-9]{2}[-][0-9]{2}[T][0-9]{2}[:][0-9]{2}[:][0-9]+", str(self.new_model.created_at))  # noqa: E402
         match = bool(match)
-        match2 = re.match("^[0-9]{4}[-][0-9]{2}[-][0-9]{2}[T][0-9]{2}[:][0-9]{2}[:][0-9]+", str(self.new_model.updated_at))
+        match2 = re.match("^[0-9]{4}[-][0-9]{2}[-][0-9]{2}[T][0-9]{2}[:][0-9]{2}[:][0-9]+", str(self.new_model.updated_at))  # noqa: E402
         match2 = bool(match2)
         self.assertEqual(True, match)
         self.assertEqual(True, match2)
+
 
 if __name__ == "__main__":
     unittest.main()
