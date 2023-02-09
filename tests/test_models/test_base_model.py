@@ -13,6 +13,8 @@ class TestBaseModel(unittest.TestCase):
     def setUp(self):
         """Create new instance for each test case"""
         self.new_model = BaseModel()
+        my_json = self.new_model.to_dict()
+        self.new_model_2 = BaseModel(**my_json)
 
     def test_base_model_instance(self):
         """ Checks if the model is instance of BaseModel"""
@@ -51,10 +53,9 @@ class TestBaseModel(unittest.TestCase):
     def test_to_dict_method(self):
         """Check if to dict has all the neccesary keys
         """
-        self_dict = self.new_model.__dict__
+        self_dict = self.new_model.__dict__.copy()
         arr1 = [i for i in self_dict]
-        self.new_model.to_dict()
-        self_dict_2 = self.new_model.__dict__
+        self_dict_2 = self.new_model.to_dict()
         arr2 = [j for j in self_dict_2]
         arr1.append("__class__")
         arr1.sort()
@@ -65,13 +66,28 @@ class TestBaseModel(unittest.TestCase):
         """
             Also checks if updated_at and created_at
         """
-        self.new_model.to_dict()
-        match = re.match("^[0-9]{4}[-][0-9]{2}[-][0-9]{2}[T][0-9]{2}[:][0-9]{2}[:][0-9]+", str(self.new_model.created_at))  # noqa: E402
+        _dict = self.new_model.to_dict()
+        match = re.match(
+                "^[0-9]{4}[-][0-9]{2}[-][0-9]"
+                "{2}[T][0-9]{2}[:][0-9]{2}[:]"
+                "[0-9]+", 
+                str(_dict["created_at"])
+                )
         match = bool(match)
-        match2 = re.match("^[0-9]{4}[-][0-9]{2}[-][0-9]{2}[T][0-9]{2}[:][0-9]{2}[:][0-9]+", str(self.new_model.updated_at))  # noqa: E402
+        match2 = re.match(
+            "^[0-9]{4}[-][0-9]{2}[-][0-9]{2}"
+            "[T][0-9]{2}[:][0-9]{2}[:][0-9]+", 
+            str(_dict["updated_at"])
+            )
         match2 = bool(match2)
         self.assertEqual(True, match)
         self.assertEqual(True, match2)
+
+    def test_no__class(self):
+        """
+            Check that "__class__" is not in the new object attributes
+        """
+        self.assertNotIn("__class__", self.new_model_2.__dict__)
 
 
 if __name__ == "__main__":
