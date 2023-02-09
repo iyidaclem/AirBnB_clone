@@ -13,8 +13,8 @@ class TestBaseModel(unittest.TestCase):
     def setUp(self):
         """Create new instance for each test case"""
         self.new_model = BaseModel()
-        my_json = self.new_model.to_dict()
-        self.new_model_2 = BaseModel(**my_json)
+        self.my_json = self.new_model.to_dict()
+        self.new_model_2 = BaseModel(**self.my_json)
 
     def test_base_model_instance(self):
         """ Checks if the model is instance of BaseModel"""
@@ -89,6 +89,25 @@ class TestBaseModel(unittest.TestCase):
         """
         self.assertNotIn("__class__", self.new_model_2.__dict__)
 
+    def test_has_all_keys(self):
+        """ 
+            Check of the new instance has dictionary 
+            keys and values as attributes
+        """
+        _my_json_keys = [i for i in self.my_json]
+        _json_keys_2 = [j for j in self.new_model_2.__dict__]
+        _json_keys_2.append("__class__")
+        _my_json_keys.sort()
+        _json_keys_2.sort()
+        self.assertEqual(_my_json_keys, _json_keys_2)
+
+    def test_created_at_and_updated_at(self):
+        """
+            Check if created_at and updated_at are 
+            datetime.datetime object
+        """
+        self.assertIsInstance(self.new_model_2.created_at, datetime)
+        self.assertIsInstance(self.new_model_2.updated_at, datetime)
 
 if __name__ == "__main__":
     unittest.main()
