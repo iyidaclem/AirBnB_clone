@@ -6,6 +6,7 @@ A module that contains our hbnb console
 import cmd
 import models
 from  models.base_model import BaseModel
+from models.user import User
 
 
 class HBNBCommand(cmd.Cmd):
@@ -15,7 +16,7 @@ class HBNBCommand(cmd.Cmd):
 
     prompt = "(hbnb) "
 
-    all_models = {"BaseModel": BaseModel}
+    all_models = {"BaseModel": BaseModel, "User": User}
 
     def do_quit(self, line):
         """ Simple command to exit the console """
@@ -124,8 +125,14 @@ class HBNBCommand(cmd.Cmd):
                 print("Illegal update")
                 pass
             else:
-                print(type(eval(_line[3])))
-                setattr(all_classes[name + "." + _id], _line[2], eval(_line[3]))
+                val = None
+                if _line[3].isnumeric():
+                    val = eval(_line[3])
+                elif _line[3][0] == "\"" or _line[3][0] == "\'":
+                    val = eval(_line[3])
+                else:
+                    val = _line[3]
+                setattr(all_classes[name + "." + _id], _line[2], val)
                 models.storage.save()
 
 
