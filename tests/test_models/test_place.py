@@ -9,7 +9,7 @@ from models.place import Place
 
 class TestPlace(unittest.TestCase):
     """ Module for testing place model"""
-    
+
     def setUp(self):
         """set up the new place instance"""
         self.new_place = Place()
@@ -19,9 +19,9 @@ class TestPlace(unittest.TestCase):
         is an instance of a BaseModel
         """
         self.assertIsInstance(self.new_place, BaseModel)
-    
+
     def test_new_place_attributes(self):
-        """ Test if the new_place instance has 
+        """ Test if the new_place instance has
             all the attributes
         """
         self.assertEqual(True, hasattr(self.new_place, "city_id"))

@@ -9,7 +9,7 @@ from models.state import State
 
 class TestState(unittest.TestCase):
     """ Module for testing state model"""
-    
+
     def setUp(self):
         """set up the new state instance"""
         self.new_state = State()
@@ -19,9 +19,9 @@ class TestState(unittest.TestCase):
         is an instance of a BaseModel
         """
         self.assertIsInstance(self.new_state, BaseModel)
-    
+
     def test_new_state_attributes(self):
-        """ Test if the new_state instance has 
+        """ Test if the new_state instance has
             the attributes name
         """
         self.assertEqual(True, hasattr(self.new_state, "name"))

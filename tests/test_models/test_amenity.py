@@ -9,7 +9,7 @@ from models.amenity import Amenity
 
 class TestAmenity(unittest.TestCase):
     """ Module for testing amenity model"""
-    
+
     def setUp(self):
         """set up the new amenity instance"""
         self.new_amenity = Amenity()
@@ -19,9 +19,9 @@ class TestAmenity(unittest.TestCase):
         is an instance of a BaseModel
         """
         self.assertIsInstance(self.new_amenity, BaseModel)
-    
+
     def test_new_amenity_attributes(self):
-        """ Test if the new_amenity instance has 
+        """ Test if the new_amenity instance has
             the attributes name
         """
         self.assertEqual(True, hasattr(self.new_amenity, "name"))

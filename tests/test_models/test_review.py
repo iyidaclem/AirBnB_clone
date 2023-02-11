@@ -9,7 +9,7 @@ from models.review import Review
 
 class TestReview(unittest.TestCase):
     """ Module for testing review model"""
-    
+
     def setUp(self):
         """set up the new review instance"""
         self.new_review = Review()
@@ -19,9 +19,9 @@ class TestReview(unittest.TestCase):
         is an instance of a BaseModel
         """
         self.assertIsInstance(self.new_review, BaseModel)
-    
+
     def test_new_review_attributes(self):
-        """ Test if the new_review instance has 
+        """ Test if the new_review instance has
             the attributes place_id, user_id and text
         """
         self.assertEqual(True, hasattr(self.new_review, "place_id"))
