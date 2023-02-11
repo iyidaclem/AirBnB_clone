@@ -4,9 +4,15 @@ A module that contains our hbnb console
 """
 
 import cmd
+import subprocess
 import models
 from models.base_model import BaseModel
 from models.user import User
+from models.place import Place
+from models.state import State
+from models.city import City
+from models.amenity import Amenity
+from models.review import Review
 
 
 class HBNBCommand(cmd.Cmd):
@@ -16,7 +22,9 @@ class HBNBCommand(cmd.Cmd):
 
     prompt = "(hbnb) "
 
-    all_models = {"BaseModel": BaseModel, "User": User}
+    all_models = {"BaseModel": BaseModel, "User": User, "Place": Place,
+                  "State": State, "City": City, "Amenity": Amenity,
+                  "Review": Review}
 
     def do_quit(self, line):
         """ Simple command to exit the console """
@@ -25,6 +33,16 @@ class HBNBCommand(cmd.Cmd):
     def do_EOF(self, line):
         """ EOF exits the console """
         return True
+
+    def do_shell(self, line):
+        """ Used to run default shell command """
+        try:
+            result = subprocess.run(line, stdout=subprocess.PIPE,
+                                    stderr=subprocess.PIPE, shell=True,
+                                    check=True)
+            print(result.stdout.decode().strip())
+        except subprocess.CalledProcessError as e:
+            print(e.stderr.decode().strip())
 
     def do_create(self, line):
         """ Creates a new instance of BaseModel """
