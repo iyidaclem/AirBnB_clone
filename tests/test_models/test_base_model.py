@@ -70,13 +70,13 @@ class TestBaseModel(unittest.TestCase):
         match = re.match(
                 "^[0-9]{4}[-][0-9]{2}[-][0-9]"
                 "{2}[T][0-9]{2}[:][0-9]{2}[:]"
-                "[0-9]+", 
+                "[0-9]+",
                 str(_dict["created_at"])
                 )
         match = bool(match)
         match2 = re.match(
             "^[0-9]{4}[-][0-9]{2}[-][0-9]{2}"
-            "[T][0-9]{2}[:][0-9]{2}[:][0-9]+", 
+            "[T][0-9]{2}[:][0-9]{2}[:][0-9]+",
             str(_dict["updated_at"])
             )
         match2 = bool(match2)
@@ -90,8 +90,8 @@ class TestBaseModel(unittest.TestCase):
         self.assertNotIn("__class__", self.new_model_2.__dict__)
 
     def test_has_all_keys(self):
-        """ 
-            Check of the new instance has dictionary 
+        """
+            Check of the new instance has dictionary
             keys and values as attributes
         """
         _my_json_keys = [i for i in self.my_json]
@@ -103,11 +103,12 @@ class TestBaseModel(unittest.TestCase):
 
     def test_created_at_and_updated_at(self):
         """
-            Check if created_at and updated_at are 
+            Check if created_at and updated_at are
             datetime.datetime object
         """
         self.assertIsInstance(self.new_model_2.created_at, datetime)
         self.assertIsInstance(self.new_model_2.updated_at, datetime)
+
 
 if __name__ == "__main__":
     unittest.main()
