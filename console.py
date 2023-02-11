@@ -5,7 +5,7 @@ A module that contains our hbnb console
 
 import cmd
 import models
-from  models.base_model import BaseModel
+from models.base_model import BaseModel
 from models.user import User
 
 
@@ -39,7 +39,8 @@ class HBNBCommand(cmd.Cmd):
 
     def do_show(self, line):
         """
-        Prints the string representation of an instance based on the class name and id
+        Prints the string representation of an
+        instance based on the class name and id
         """
         all_classes = models.storage.all()
         if len(line) == 0:
@@ -51,17 +52,18 @@ class HBNBCommand(cmd.Cmd):
             if len(_line) > 1:
                 _id = _line[1]
             if name not in HBNBCommand.all_models:
-                print("** class doesn't exist ** (")
-            elif _id == None:
-                print ("** instance id missing **")
+                print("** class doesn't exist ** ")
+            elif _id is None:
+                print("** instance id missing **")
             elif name + "." + _id not in all_classes:
                 print("** no instance found **")
-            else: 
-                print(all_classes[name  + "." + _id].__str__())
+            else:
+                print(all_classes[name + "." + _id].__str__())
 
     def do_destroy(self, line):
         """
-        Deletes an instance based on the class name and id (save the change into the JSON file)
+        Deletes an instance based on the class name
+        and id (save the change into the JSON file)
         """
 
         all_classes = models.storage.all()
@@ -74,9 +76,9 @@ class HBNBCommand(cmd.Cmd):
             if len(_line) > 1:
                 _id = _line[1]
             if name not in HBNBCommand.all_models:
-                print("** class doesn't exist ** (")
-            elif _id == None:
-                print ("** instance id missing **")
+                print("** class doesn't exist **")
+            elif _id is None:
+                print("** instance id missing **")
             elif name + "." + _id not in all_classes:
                 print("** no instance found **")
             else:
@@ -86,12 +88,15 @@ class HBNBCommand(cmd.Cmd):
 
     def do_all(self, line):
         """
-        Prints all string representation of all instances based or not on the class name. Ex: $ all BaseModel or $ all
+        Prints all string representation of all instances
+        based or not on the class name. Ex: $ all BaseModel or $ all
         """
 
         all_objects = models.storage.all()
         if len(line) > 0 and line in HBNBCommand.all_models:
-            print([v.__str__() for k, v in all_objects.items() if v.__class__.__name__ == line])
+            print([v.__str__() for k, v in
+                  all_objects.items() if
+                  v.__class__.__name__ == line])
         elif len(line) > 0 and line not in HBNBCommand.all_models:
             print("** class doesn't exist ** ")
         else:
@@ -99,7 +104,8 @@ class HBNBCommand(cmd.Cmd):
 
     def do_update(self, line):
         """
-        Updates an instance based on the class name and id by adding or updating attribute (save the change into the JSON file)
+        Updates an instance based on the class name and id by adding
+        or updating attribute (save the change into the JSON file)
         """
 
         _line = line.split()
@@ -113,15 +119,16 @@ class HBNBCommand(cmd.Cmd):
                 _id = _line[1]
             if name not in HBNBCommand.all_models:
                 print("** class doesn't exist ** ")
-            elif _id == None:
-                print ("** instance id missing **")
+            elif _id is None:
+                print("** instance id missing **")
             elif name + "." + _id not in all_classes:
                 print("** no instance found **")
             elif len(_line) < 3:
                 print("** attribute name missing **")
             elif len(_line) < 4:
                 print("** value missing **")
-            elif _line[2] == "id" or _line[2] == "created_at" or _line[2] == "updated_at":
+            elif (_line[2] == "id" or _line[2] == "created_at"
+                  or _line[2] == "updated_at"):
                 print("Illegal update")
                 pass
             else:
@@ -134,7 +141,6 @@ class HBNBCommand(cmd.Cmd):
                     val = _line[3]
                 setattr(all_classes[name + "." + _id], _line[2], val)
                 models.storage.save()
-
 
 
 if __name__ == '__main__':
