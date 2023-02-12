@@ -18,6 +18,8 @@ class HBNBCommand(cmd.Cmd):
 
     all_models = {"BaseModel": BaseModel, "User": User}
 
+    user_commands = ["all"]
+
     def do_quit(self, line):
         """ Simple command to exit the console """
         return True
@@ -142,6 +144,41 @@ class HBNBCommand(cmd.Cmd):
                 setattr(all_classes[name + "." + _id], _line[2], val)
                 models.storage.save()
 
+    def default(self, line):
+        """ Handles default command entered by the user """
+        _cmd = line.split(".")
+        cls_name = ""
+        comd = ""
+        _arg = ""
+
+        if len(_cmd) == 2:
+            if _cmd[0] in HBNBCommand.all_models:
+                cls_name = _cmd[0]
+                if _cmd[1][-1] != ")" or "(" not in _cmd[1]:
+                    return False
+                _split = _cmd[1].split("(")
+                if _split[0] in HBNBCommand.user_commands:
+                    comd = _split[0]
+                    if len(_split[1]) > 1:
+                        # _arg = _split[2][0:-1]
+                        pass
+                    else:
+                        print(comd)
+                        self.do_all(cls_name)
+                        #match comd:
+                            #case "all":
+                                #self.do_all(cls_name)
+                            #case _:
+                                #pass
+                else:
+                    print("** command not found **")
+            else:
+                print("** class doesn't exist **")
+        else:
+            print("*** Unknown syntax:", line)
+        #return cmd.Cmd.default(self, None)
+        #return False
+    
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
