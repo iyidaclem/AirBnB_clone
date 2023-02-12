@@ -119,7 +119,7 @@ class HBNBCommand(cmd.Cmd):
             print("** class doesn't exist ** ")
         else:
             print([v.__str__() for k, v in all_objects.items()])
-
+    
     def do_update(self, line):
         """
         Updates an instance based on the class name and id by adding
