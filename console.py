@@ -179,7 +179,10 @@ class HBNBCommand(cmd.Cmd):
                     comd = _split[0]
                     if len(_split[1]) > 1:
                         # _arg = _split[2][0:-1]
-                        pass
+                        match comd:
+                            case "count":
+                                total_inst = leni(self.do_show(cls_name))
+                        print(total_inst)
                     else:
                         self.do_all(cls_name)
                 else:
