@@ -28,7 +28,7 @@ class HBNBCommand(cmd.Cmd):
                   "State": State, "City": City, "Amenity": Amenity,
                   "Review": Review}
 
-    user_commands = ["all", "count"]
+    user_commands = ["all", "count", "show"]
 
     def do_quit(self, line):
         """ Simple command to exit the console """
@@ -168,12 +168,12 @@ class HBNBCommand(cmd.Cmd):
         """ Handles default command entered by the user """
         cls_name = ("".join(re.findall("^[A-Z]{1}[A-Za-z]+[.]", line)))
         comd = ("".join(re.findall("[.]{1}[a-z]+[(]", line)))
-        arg = ("".join(re.findall("[(]{1}.*[)]", line)))
+        arg = ("".join(re.findall("[(]{1}[']{1}.*[')]", line)))
         if len(cls_name) == 0 or len(comd) == 0 or len(arg) == 0:
             print("Invalid Command")
             return False
         else:
-            cls_name, comd, arg = cls_name[:-1], comd[1:-1], arg[1:-1]
+            cls_name, comd, arg = cls_name[:-1], comd[1:-1], arg[2:-2]
         if cls_name not in self.all_models:
             print("class not found")
             return False
@@ -186,7 +186,7 @@ class HBNBCommand(cmd.Cmd):
             eval("self." + comd + "('" + cls_name + "')")
         else:
             # handle calls with args
-            eval("self." + comd + "('" + cls_name + "', '" + arg + "')")
+            eval("self." + comd + "('" + cls_name + "', " + arg + ")")
 
     def all(self, cls_name):
         """ Returns all the instance of a Model """
@@ -203,6 +203,16 @@ class HBNBCommand(cmd.Cmd):
             print(len(all_inst))
         else:
             print(0)
+
+    def show(self, cls_name, _id):
+        """ Command to retreive an instance based on its `id` """
+        all_classes = models.storage.all()
+        print(_id)
+        
+        if cls_name + "." + _id not in all_classes:
+            print("** no instance found **")
+        else:
+            print(all_classes[cls_name + "." + _id].__str__())
 
 
 if __name__ == '__main__':
