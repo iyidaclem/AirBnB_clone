@@ -190,6 +190,11 @@ class HBNBCommand(cmd.Cmd):
             print("*** Unknown syntax:", line)
         return False
 
+    def _time(self):
+        print("This is current time")
+
+    def do_mytime(self, line):
+        self._time()    
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
