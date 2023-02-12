@@ -181,22 +181,15 @@ class HBNBCommand(cmd.Cmd):
                         # _arg = _split[2][0:-1]
                         pass
                     else:
-                        print(comd)
                         self.do_all(cls_name)
-                        #match comd:
-                            #case "all":
-                                #self.do_all(cls_name)
-                            #case _:
-                                #pass
                 else:
                     print("** command not found **")
             else:
                 print("** class doesn't exist **")
         else:
             print("*** Unknown syntax:", line)
-        #return cmd.Cmd.default(self, None)
-        #return False
-    
+        return False
+
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
