@@ -3,6 +3,8 @@
 A module that contains our hbnb console
 """
 
+
+import re
 import cmd
 import subprocess
 import models
@@ -26,7 +28,7 @@ class HBNBCommand(cmd.Cmd):
                   "State": State, "City": City, "Amenity": Amenity,
                   "Review": Review}
 
-    user_commands = ["all"]
+    user_commands = ["all", "count"]
 
     def do_quit(self, line):
         """ Simple command to exit the console """
@@ -121,7 +123,7 @@ class HBNBCommand(cmd.Cmd):
             print("** class doesn't exist ** ")
         else:
             print([v.__str__() for k, v in all_objects.items()])
-    
+
     def do_update(self, line):
         """
         Updates an instance based on the class name and id by adding
@@ -164,40 +166,44 @@ class HBNBCommand(cmd.Cmd):
 
     def default(self, line):
         """ Handles default command entered by the user """
-        _cmd = line.split(".")
-        cls_name = ""
-        comd = ""
-        _arg = ""
-
-        if len(_cmd) == 2:
-            if _cmd[0] in HBNBCommand.all_models:
-                cls_name = _cmd[0]
-                if _cmd[1][-1] != ")" or "(" not in _cmd[1]:
-                    return False
-                _split = _cmd[1].split("(")
-                if _split[0] in HBNBCommand.user_commands:
-                    comd = _split[0]
-                    if len(_split[1]) > 1:
-                        # _arg = _split[2][0:-1]
-                        match comd:
-                            case "count":
-                                total_inst = leni(self.do_show(cls_name))
-                        print(total_inst)
-                    else:
-                        self.do_all(cls_name)
-                else:
-                    print("** command not found **")
-            else:
-                print("** class doesn't exist **")
+        cls_name = ("".join(re.findall("^[A-Z]{1}[A-Za-z]+[.]", line)))
+        comd = ("".join(re.findall("[.]{1}[a-z]+[(]", line)))
+        arg = ("".join(re.findall("[(]{1}.*[)]", line)))
+        if len(cls_name) == 0 or len(comd) == 0 or len(arg) == 0:
+            print("Invalid Command")
+            return False
         else:
-            print("*** Unknown syntax:", line)
-        return False
+            cls_name, comd, arg = cls_name[:-1], comd[1:-1], arg[1:-1]
+        if cls_name not in self.all_models:
+            print("class not found")
+            return False
+        elif comd not in self.user_commands:
+            print("command not found")
+            return False
+        # Function calls
+        if len(arg) == 0:
+            # handle call without args
+            eval("self." + comd + "('" + cls_name + "')")
+        else:
+            # handle calls with args
+            eval("self." + comd + "('" + cls_name + "', '" + arg + "')")
 
-    def _time(self):
-        print("This is current time")
+    def all(self, cls_name):
+        """ Returns all the instance of a Model """
+        self.do_all(cls_name)
 
-    def do_mytime(self, line):
-        self._time()    
+    def count(self, cls_name):
+        """ Count the number of instances of a model """
+
+        all_objects = models.storage.all()
+        if cls_name in HBNBCommand.all_models:
+            all_inst = ([v.__str__() for k, v in
+                        all_objects.items() if
+                        v.__class__.__name__ == cls_name])
+            print(len(all_inst))
+        else:
+            print(0)
+
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
