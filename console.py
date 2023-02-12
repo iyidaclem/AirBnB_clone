@@ -28,7 +28,7 @@ class HBNBCommand(cmd.Cmd):
                   "State": State, "City": City, "Amenity": Amenity,
                   "Review": Review}
 
-    user_commands = ["all", "count"]
+    user_commands = ["all", "count", "destroy"]
 
     def do_quit(self, line):
         """ Simple command to exit the console """
@@ -168,7 +168,7 @@ class HBNBCommand(cmd.Cmd):
         """ Handles default command entered by the user """
         cls_name = ("".join(re.findall("^[A-Z]{1}[A-Za-z]+[.]", line)))
         comd = ("".join(re.findall("[.]{1}[a-z]+[(]", line)))
-        arg = ("".join(re.findall("[(]{1}.*[)]", line)))
+        arg = ("".join(re.findall("[(].*[)]", line)))
         if len(cls_name) == 0 or len(comd) == 0 or len(arg) == 0:
             print("Invalid Command")
             return False
@@ -185,6 +185,9 @@ class HBNBCommand(cmd.Cmd):
             # handle call without args
             eval("self." + comd + "('" + cls_name + "')")
         else:
+            if len(("".join(re.findall("[(][\'\"].*[\'\"][)]", line)))) == 0:
+                print("Enclose your argument with single or double quite ")
+                return False
             # handle calls with args
             eval("self." + comd + "('" + cls_name + "', '" + arg + "')")
 
@@ -203,6 +206,18 @@ class HBNBCommand(cmd.Cmd):
             print(len(all_inst))
         else:
             print(0)
+
+    def destroy(self, cls_name, arg=None):
+        """ Destroy an instance of a class """
+        if arg is None:
+            print("*** Missing " + cls_name + "id ***")
+            return False
+        all_objects = models.storage.all()
+        if cls_name + "." + arg in all_objects:
+            del all_objects[cls_name + "." + arg]
+            models.storage.save()
+        else:
+            print("*** Instance not found ***")
 
 
 if __name__ == '__main__':
