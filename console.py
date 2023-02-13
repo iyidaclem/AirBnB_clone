@@ -28,11 +28,7 @@ class HBNBCommand(cmd.Cmd):
                   "State": State, "City": City, "Amenity": Amenity,
                   "Review": Review}
 
-<<<<<<< HEAD
-    user_commands = ["all", "count", "show"]
-=======
-    user_commands = ["all", "count", "destroy"]
->>>>>>> bfa4a38a1077c84e9ea57208340e5b18c59bfdb3
+    user_commands = ["all", "count", "show", "destroy"]
 
     def do_quit(self, line):
         """ Simple command to exit the console """
@@ -172,18 +168,15 @@ class HBNBCommand(cmd.Cmd):
         """ Handles default command entered by the user """
         cls_name = ("".join(re.findall("^[A-Z]{1}[A-Za-z]+[.]", line)))
         comd = ("".join(re.findall("[.]{1}[a-z]+[(]", line)))
-<<<<<<< HEAD
-        arg = ("".join(re.findall("[(]{1}.*[)]", line)))
-=======
         arg = ("".join(re.findall("[(].*[)]", line)))
->>>>>>> bfa4a38a1077c84e9ea57208340e5b18c59bfdb3
+
         if len(cls_name) == 0 or len(comd) == 0 or len(arg) == 0:
             print("Invalid Command")
             return False
         else:
-            cls_name, comd, arg = cls_name[:-1], comd[1:-1], arg[2:-2]
+            cls_name, comd, arg = cls_name[:-1], comd[1:-1], arg[1:-1]
         if cls_name not in self.all_models:
-            print("class not found")
+            print("** class doesn't exist **")
             return False
         elif comd not in self.user_commands:
             print("command not found")
@@ -215,29 +208,26 @@ class HBNBCommand(cmd.Cmd):
         else:
             print(0)
 
-<<<<<<< HEAD
     def show(self, cls_name, _id):
         """ Command to retreive an instance based on its `id` """
         all_classes = models.storage.all()
-        print(_id)
-        
+
         if cls_name + "." + _id not in all_classes:
             print("** no instance found **")
         else:
             print(all_classes[cls_name + "." + _id].__str__())
-=======
+
     def destroy(self, cls_name, arg=None):
         """ Destroy an instance of a class """
         if arg is None:
-            print("*** Missing " + cls_name + "id ***")
+            print("** instance id missing **")
             return False
         all_objects = models.storage.all()
         if cls_name + "." + arg in all_objects:
             del all_objects[cls_name + "." + arg]
             models.storage.save()
         else:
-            print("*** Instance not found ***")
->>>>>>> bfa4a38a1077c84e9ea57208340e5b18c59bfdb3
+            print("** no instance found **")
 
 
 if __name__ == '__main__':
