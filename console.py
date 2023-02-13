@@ -217,7 +217,7 @@ class HBNBCommand(cmd.Cmd):
             del all_objects[cls_name + "." + arg]
             models.storage.save()
         else:
-            print("*** Instance not found ***")
+            print("** no instance found ***")
 
 
 if __name__ == '__main__':
