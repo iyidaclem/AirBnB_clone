@@ -28,7 +28,7 @@ class HBNBCommand(cmd.Cmd):
                   "State": State, "City": City, "Amenity": Amenity,
                   "Review": Review}
 
-    user_commands = ["all", "count", "show", "destroy"]
+    user_commands = ["all", "count", "show", "destroy", "update"]
 
     def do_quit(self, line):
         """ Simple command to exit the console """
@@ -129,7 +129,6 @@ class HBNBCommand(cmd.Cmd):
         Updates an instance based on the class name and id by adding
         or updating attribute (save the change into the JSON file)
         """
-
         _line = line.split()
         all_classes = models.storage.all()
         if len(line) == 0:
@@ -190,7 +189,11 @@ class HBNBCommand(cmd.Cmd):
                 print("Enclose your argument with single or double quite ")
                 return False
             # handle calls with args
-            eval("self." + comd + "('" + cls_name + "', " + arg + ")")
+            try:
+                eval("self." + comd + "('" + cls_name + "', " + arg + ")")
+            except Exception as e:
+                print(e)
+                print("Enclose all your parameters in single or double quotes")
 
     def all(self, cls_name):
         """ Returns all the instance of a Model """
@@ -228,6 +231,15 @@ class HBNBCommand(cmd.Cmd):
             models.storage.save()
         else:
             print("** no instance found **")
+
+    def update(self, cls_name, *arg):
+        """ Function to update an instance based
+        on his ID: <class name>.update(<id>, <attribute name>,
+        <attribute value>) """
+        new_arg = " ".join(arg)
+        line = cls_name + " " + new_arg
+        self.do_update(line)
+        return
 
 
 if __name__ == '__main__':
