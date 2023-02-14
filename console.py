@@ -185,6 +185,10 @@ class HBNBCommand(cmd.Cmd):
             # handle call without args
             eval("self." + comd + "('" + cls_name + "')")
         else:
+            if len(("".join(re.findall("[(][\'\"].*[}][)]", line)))) != 0:
+                val = eval(arg)
+                self.update_with_dict(cls_name, val[0], val[1])
+                return False
             if len(("".join(re.findall("[(][\'\"].*[\'\"][)]", line)))) == 0:
                 print("Enclose your argument with single or double quite ")
                 return False
@@ -232,7 +236,7 @@ class HBNBCommand(cmd.Cmd):
         else:
             print("** no instance found **")
 
-    def update(self, cls_name, *arg):
+    def update(self, cls_name, *arg, **kwargs):
         """ Function to update an instance based
         on his ID: <class name>.update(<id>, <attribute name>,
         <attribute value>) """
@@ -240,6 +244,19 @@ class HBNBCommand(cmd.Cmd):
         line = cls_name + " " + new_arg
         self.do_update(line)
         return
+
+    def update_with_dict(self, cls_name, _id, _dict):
+        models.storage.reload()
+        all_data = models.storage.all()
+        if cls_name + "." + _id not in all_data:
+            print("** no instance found **")
+            return False
+        for k, v in _dict.items():
+            if k == "id" or k == "created_at" or k == "updated_at":
+                continue
+            else:
+                setattr(all_data[cls_name + "." + _id], k, v)
+        models.storage.save()
 
 
 if __name__ == '__main__':
